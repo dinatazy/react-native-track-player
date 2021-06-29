@@ -30,6 +30,11 @@ import com.guichaguri.trackplayer.service.metadata.MetadataManager;
 import com.guichaguri.trackplayer.service.models.Track;
 import com.guichaguri.trackplayer.service.player.ExoPlayback;
 import com.guichaguri.trackplayer.service.player.LocalPlayback;
+import android.media.audiofx.Equalizer;
+import androidx.annotation.Nullable;
+import com.google.android.exoplayer2.analytics.AnalyticsListener;
+import android.media.audiofx.BassBoost;
+import java.util.Arrays;
 
 import static com.google.android.exoplayer2.DefaultLoadControl.*;
 
@@ -38,6 +43,10 @@ import static com.google.android.exoplayer2.DefaultLoadControl.*;
  */
 public class MusicManager implements OnAudioFocusChangeListener {
 
+    public static final  String ARG_AUDIO_SESSIOIN_ID = "audio_session_id";
+    private int audioSesionId;
+    private Equalizer mEqualizer;
+    private BassBoost bassBoost;
     private final MusicService service;
 
     private final WakeLock wakeLock;
@@ -132,6 +141,33 @@ public class MusicManager implements OnAudioFocusChangeListener {
                 .setLoadControl(control)
                 .build();
 
+        player.addAnalyticsListener(new AnalyticsListener() {
+            
+        @Override
+        public void onAudioSessionId(EventTime eventTime, int audioSessionId) {
+            Log.d("audioSesionId", String.valueOf(audioSessionId));
+            mEqualizer = new Equalizer(0, audioSesionId);
+            mEqualizer.usePreset((short) (9));
+
+            short[] bandLevelRange = mEqualizer.getBandLevelRange();
+           // mEqualizer.setBandLevel((short)(2), (short) (-1500));
+            Log.d("bandLevelRange", Arrays.toString(bandLevelRange));
+           // Log.d("BandLevel", String.valueOf(mEqualizer.getBandLevel()));
+            bassBoost = new BassBoost(0, audioSesionId);
+            bassBoost.setStrength((short) (1500));
+            bassBoost.setEnabled(true);
+            int eqEnabled = mEqualizer.setEnabled(true);
+            Log.d("eqEnabled",String.valueOf(eqEnabled));
+            for (short i = 0; i < mEqualizer.getNumberOfPresets(); i++) {
+              //equalizerPresetNames.add(mEqualizer.getPresetName(i));
+              Log.d("getPresetName", String.valueOf(mEqualizer.getPresetName(i)));
+            }
+  
+
+             }
+    }); 
+
+
         player.setAudioAttributes(new com.google.android.exoplayer2.audio.AudioAttributes.Builder()
                 .setContentType(C.CONTENT_TYPE_MUSIC).setUsage(C.USAGE_MEDIA).build());
 
@@ -162,7 +198,7 @@ public class MusicManager implements OnAudioFocusChangeListener {
         }
 
         if (playback.shouldAutoUpdateMetadata())
-            metadata.setActive(true);
+        metadata.setActive(true);
     }
 
     public void onPause() {
@@ -179,7 +215,7 @@ public class MusicManager implements OnAudioFocusChangeListener {
         if(wifiLock.isHeld()) wifiLock.release();
 
         if (playback.shouldAutoUpdateMetadata())
-            metadata.setActive(true);
+        metadata.setActive(true);
     }
 
     public void onStop() {
@@ -198,7 +234,7 @@ public class MusicManager implements OnAudioFocusChangeListener {
         abandonFocus();
 
         if (playback.shouldAutoUpdateMetadata())
-            metadata.setActive(false);
+        metadata.setActive(false);
     }
 
     public void onStateChange(int state) {
@@ -209,7 +245,7 @@ public class MusicManager implements OnAudioFocusChangeListener {
         service.emit(MusicEvents.PLAYBACK_STATE, bundle);
 
         if (playback.shouldAutoUpdateMetadata())
-            metadata.updatePlayback(playback);
+        metadata.updatePlayback(playback);
     }
 
     public void onTrackUpdate(Integer prevIndex, long prevPos, Integer nextIndex, Track next) {
