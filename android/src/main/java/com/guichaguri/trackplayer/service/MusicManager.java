@@ -30,6 +30,11 @@ import com.guichaguri.trackplayer.service.metadata.MetadataManager;
 import com.guichaguri.trackplayer.service.models.Track;
 import com.guichaguri.trackplayer.service.player.ExoPlayback;
 import com.guichaguri.trackplayer.service.player.LocalPlayback;
+import android.media.audiofx.Equalizer;
+import androidx.annotation.Nullable;
+import com.google.android.exoplayer2.analytics.AnalyticsListener;
+import android.media.audiofx.BassBoost;
+import java.util.Arrays;
 
 import static com.google.android.exoplayer2.DefaultLoadControl.*;
 
@@ -37,6 +42,12 @@ import static com.google.android.exoplayer2.DefaultLoadControl.*;
  * @author Guichaguri
  */
 public class MusicManager implements OnAudioFocusChangeListener {
+
+    public static final  String ARG_AUDIO_SESSIOIN_ID = "audio_session_id";
+
+    private int audioSesionId;
+    private Equalizer mEqualizer;
+    private BassBoost bassBoost;
 
     private final MusicService service;
 
@@ -127,10 +138,36 @@ public class MusicManager implements OnAudioFocusChangeListener {
                 .setBackBuffer(backBuffer, false)
                 .createDefaultLoadControl();
 
-        SimpleExoPlayer player = new SimpleExoPlayer.Builder(service)
+                SimpleExoPlayer player = new SimpleExoPlayer.Builder(service)
                 .setLoadControl(control)
                 .build();
 
+        player.addAnalyticsListener(new AnalyticsListener() {
+            
+        @Override
+        public void onAudioSessionId(EventTime eventTime, int audioSessionId) {
+            Log.d("audioSesionId", String.valueOf(audioSessionId));
+            mEqualizer = new Equalizer(0, audioSesionId);
+            int eqEnabled = mEqualizer.setEnabled(true);
+           // mEqualizer.usePreset((short) (5));
+
+            short[] bandLevelRange = mEqualizer.getBandLevelRange();
+            //mEqualizer.setBandLevel((short)(4), (short) (1500));
+            Log.d("bandLevelRange", Arrays.toString(bandLevelRange));
+           // Log.d("BandLevel", String.valueOf(mEqualizer.getBandLevel()));
+          //  bassBoost = new BassBoost(0, audioSesionId);
+           // bassBoost.setEnabled(true);
+            //bassBoost.setStrength((short) (1500));
+            Log.d("HasControl", String.valueOf(mEqualizer.hasControl()));
+            Log.d("eqEnabled",String.valueOf(eqEnabled));
+            for (short i = 0; i < mEqualizer.getNumberOfPresets(); i++) {
+              //equalizerPresetNames.add(mEqualizer.getPresetName(i));
+              Log.d("getPresetName", String.valueOf(mEqualizer.getPresetName(i)));
+            }
+  
+
+             }
+    }); 
         player.setAudioAttributes(new com.google.android.exoplayer2.audio.AudioAttributes.Builder()
                 .setContentType(C.CONTENT_TYPE_MUSIC).setUsage(C.USAGE_MEDIA).build());
 
@@ -346,6 +383,14 @@ public class MusicManager implements OnAudioFocusChangeListener {
 
         // Disable audio focus
         abandonFocus();
+
+        if (mEqualizer != null) {
+            mEqualizer.release();
+        }
+
+        if (bassBoost != null) {
+            bassBoost.release();
+        }
 
         // Stop receiving audio becoming noisy events
         if(receivingNoisyEvents) {
