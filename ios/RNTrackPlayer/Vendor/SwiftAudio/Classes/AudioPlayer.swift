@@ -263,6 +263,10 @@ public class AudioPlayer: AVPlayerWrapperDelegate {
         updateNowPlayingCurrentTime(currentTime)
         updateNowPlayingRate(rate)
     }
+
+    public func updateNowPlayingIsLiveStream(_ isLive: Bool) {
+        nowPlayingInfoController.set(keyValue: NowPlayingInfoProperty.isLiveStream(isLive))
+    }
     
     private func updateNowPlayingDuration(_ duration: Double) {
         nowPlayingInfoController.set(keyValue: MediaItemProperty.duration(duration))

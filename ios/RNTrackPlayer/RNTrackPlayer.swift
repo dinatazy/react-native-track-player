@@ -311,6 +311,7 @@ public class RNTrackPlayer: RCTEventEmitter {
             }
             
             tracks.append(track)
+            player.remoteCommandController.updateRemoteCommandIsLiveStream(track.isLiveStream);
         }
         
         print("Adding tracks:", tracks)

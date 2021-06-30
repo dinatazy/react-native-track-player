@@ -22,6 +22,7 @@ class Track: NSObject, AudioItem, TimePitching, AssetOptionsProviding {
     var genre: String?
     var duration: Double?
     var skipped: Bool = false
+    var isLiveStream: Bool = false
     var artworkURL: MediaURL?
     let headers: [String: Any]?
     let pitchAlgorithm: String?
@@ -35,6 +36,7 @@ class Track: NSObject, AudioItem, TimePitching, AssetOptionsProviding {
         guard let id = dictionary["id"] as? String,
             let title = dictionary["title"] as? String,
             let artist = dictionary["artist"] as? String,
+            let isLiveStream = dictionary["isLiveStream"] as? Bool,
             let url = MediaURL(object: dictionary["url"])
             else { return nil }
         
@@ -42,6 +44,7 @@ class Track: NSObject, AudioItem, TimePitching, AssetOptionsProviding {
         self.url = url
         self.title = title
         self.artist = artist
+        self.isLiveStream = isLiveStream
         
         self.date = dictionary["date"] as? String
         self.album = dictionary["album"] as? String
@@ -79,7 +82,7 @@ class Track: NSObject, AudioItem, TimePitching, AssetOptionsProviding {
     // MARK: - AudioItem Protocol
     
     func getSourceUrl() -> String {
-        return url.isLocal ? url.value.path : url.value.absoluteString
+        return url.value.absoluteString
     }
     
     func getArtist() -> String? {

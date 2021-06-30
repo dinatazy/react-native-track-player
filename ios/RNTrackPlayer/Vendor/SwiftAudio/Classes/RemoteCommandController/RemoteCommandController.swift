@@ -219,5 +219,11 @@ public class RemoteCommandController {
         }
         return MPRemoteCommandHandlerStatus.commandFailed
     }
+
+    public func updateRemoteCommandIsLiveStream(_ isLive: Bool) {
+         if let audioPlayer = self.audioPlayer {
+            audioPlayer.updateNowPlayingIsLiveStream(isLive)
+        }
+    }
     
 }
