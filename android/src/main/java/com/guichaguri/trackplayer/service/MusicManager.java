@@ -341,6 +341,10 @@ public class MusicManager implements OnAudioFocusChangeListener {
         return presetNames;
     }
 
+    public void setPreset(short presetIndex) {
+        mEqualizer.usePreset((short) (presetIndex));
+    }
+
     private void requestFocus() {
         if(hasAudioFocus) return;
         Log.d(Utils.LOG, "Requesting audio focus...");

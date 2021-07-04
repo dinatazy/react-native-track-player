@@ -462,7 +462,7 @@ public class MusicModule extends ReactContextBaseJavaModule implements ServiceCo
             waitForConnection(() -> callback.resolve(binder.getPlayback().getState()));
         }
     }
-    
+
     @ReactMethod
     public void getPresetNames(final Promise callback) {
         waitForConnection(() -> {
@@ -474,4 +474,12 @@ public class MusicModule extends ReactContextBaseJavaModule implements ServiceCo
            return;
        });
        }
+
+    @ReactMethod
+    public void setPreset(float presetIndex, final Promise callback) {
+        waitForConnection(() -> {
+            binder.getPlayback().setPreset(presetIndex);
+            callback.resolve(null);
+        });
+    }
 }
