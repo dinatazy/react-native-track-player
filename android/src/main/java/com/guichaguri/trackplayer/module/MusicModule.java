@@ -462,4 +462,16 @@ public class MusicModule extends ReactContextBaseJavaModule implements ServiceCo
             waitForConnection(() -> callback.resolve(binder.getPlayback().getState()));
         }
     }
+    
+    @ReactMethod
+    public void getPresetNames(final Promise callback) {
+        waitForConnection(() -> {
+           WritableArray keyArray = new WritableNativeArray();
+           for (String key : binder.getPlayback().getPresetNames()) {
+               keyArray.pushString(key);
+           }
+           callback.resolve(keyArray);
+           return;
+       });
+       }
 }

@@ -422,4 +422,8 @@ public abstract class ExoPlayback<T extends Player> implements EventListener, Me
         handleId3Metadata(metadata);
         handleIcyMetadata(metadata);
     }
+
+    public String[] getPresetNames() {
+        return manager.getPresetNames();
+     }
 }

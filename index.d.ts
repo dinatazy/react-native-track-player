@@ -156,6 +156,10 @@ declare namespace RNTrackPlayer {
   export function getState(): Promise<State>;
   export function getRate(): Promise<number>;
 
+  //Player Equalizer
+  export function getPresetNames(): Promise<string[]>;
+
+
   // Components
 
   export interface ProgressComponentState {

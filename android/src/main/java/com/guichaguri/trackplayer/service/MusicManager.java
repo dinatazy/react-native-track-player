@@ -331,6 +331,16 @@ public class MusicManager implements OnAudioFocusChangeListener {
         service.emit(MusicEvents.BUTTON_DUCK, bundle);
     }
 
+    public String[] getPresetNames() {
+        String [] presetNames = new String[10];
+         if(audioSessionId!=0){
+            for (short i = 0; i < mEqualizer.getNumberOfPresets(); i++) {
+                presetNames[i] =  mEqualizer.getPresetName(i);
+            }
+        } 
+        return presetNames;
+    }
+
     private void requestFocus() {
         if(hasAudioFocus) return;
         Log.d(Utils.LOG, "Requesting audio focus...");
