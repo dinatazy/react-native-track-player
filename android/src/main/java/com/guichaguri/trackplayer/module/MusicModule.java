@@ -488,6 +488,14 @@ public class MusicModule extends ReactContextBaseJavaModule implements ServiceCo
     }
 
     @ReactMethod
+    public void getCenterFreq(final float band, final Promise callback) {
+     waitForConnection(() -> {
+        callback.resolve(binder.getPlayback().getCenterFreq(band));
+        return;
+    });
+    }
+
+    @ReactMethod
     public void setPreset(float presetIndex, final Promise callback) {
         waitForConnection(() -> {
             binder.getPlayback().setPreset(presetIndex);

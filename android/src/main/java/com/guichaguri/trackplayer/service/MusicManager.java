@@ -349,6 +349,14 @@ public class MusicManager implements OnAudioFocusChangeListener {
         return arr;
     }
 
+    public int getCenterFreq(short band) {
+        int freq = 0;
+        if(audioSessionId!=0){
+            return mEqualizer.getCenterFreq(band);
+        }
+        return freq;
+    }
+
     public void setPreset(short presetIndex) {
         mEqualizer.usePreset((short) (presetIndex));
     }

@@ -159,6 +159,7 @@ declare namespace RNTrackPlayer {
   //Player Equalizer
   export function getPresetNames(): Promise<string[]>;
   export function getBandLevelRanges(): Promise<number[]>;
+  export function getCenterFreq(band: number): Promise<number>;
   export function setPreset(presetIndex: number): Promise<void>;
 
 
