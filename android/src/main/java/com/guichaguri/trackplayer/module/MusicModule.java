@@ -473,7 +473,19 @@ public class MusicModule extends ReactContextBaseJavaModule implements ServiceCo
            callback.resolve(keyArray);
            return;
        });
-       }
+    }
+
+    @ReactMethod
+    public void getBandLevelRanges(final Promise callback) {
+     waitForConnection(() -> {
+        WritableArray keyArray = new WritableNativeArray();
+        for (short key : binder.getPlayback().getBandLevelRanges()) {
+            keyArray.pushInt(key);
+        }
+        callback.resolve(keyArray);
+        return;
+    });
+    }
 
     @ReactMethod
     public void setPreset(float presetIndex, final Promise callback) {

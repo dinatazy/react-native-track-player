@@ -341,6 +341,14 @@ public class MusicManager implements OnAudioFocusChangeListener {
         return presetNames;
     }
 
+    public short[] getBandLevelRanges() {
+        short[] arr = new short[]{};
+        if(audioSessionId!=0){
+            return mEqualizer.getBandLevelRange();
+        }
+        return arr;
+    }
+
     public void setPreset(short presetIndex) {
         mEqualizer.usePreset((short) (presetIndex));
     }

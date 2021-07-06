@@ -427,6 +427,10 @@ public abstract class ExoPlayback<T extends Player> implements EventListener, Me
         return manager.getPresetNames();
     }
 
+    public short[] getBandLevelRanges() {
+        return manager.getBandLevelRanges();
+    }
+
     public void setPreset(float presetIndex) {
         manager.setPreset((short) presetIndex);
     }
