@@ -162,6 +162,8 @@ declare namespace RNTrackPlayer {
   export function getCenterFreq(band: number): Promise<number>;
   export function getBandLevel(band: number): Promise<number>;
   export function setPreset(presetIndex: number): Promise<void>;
+  export function setBandLevel(band: number, level:number): Promise<void>;
+
 
 
 
