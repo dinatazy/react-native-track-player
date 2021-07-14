@@ -163,7 +163,8 @@ declare namespace RNTrackPlayer {
   export function getBandLevel(band: number): Promise<number>;
   export function setPreset(presetIndex: number): Promise<void>;
   export function setBandLevel(band: number, level:number): Promise<void>;
-
+  export function getCurrentPreset(): Promise<number>;
+  export function getNumberOfBands(): Promise<number>;
 
 
 
